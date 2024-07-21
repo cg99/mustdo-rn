@@ -1,32 +1,26 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { registerUser } from '../api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useContext } from "react";
+import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { useRouter } from "expo-router";
+import { AuthContext } from "../context/AuthContext";
 
-const Register = ({ navigation }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Register = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { register } = useContext(AuthContext);
+  const router = useRouter();
 
   const handleSubmit = async () => {
     try {
-      const data = await registerUser({ name, email, password });
-      await AsyncStorage.setItem('mdtoken', data.token);
-      navigation.navigate('Home');
+      await register({ email, password });
+      router.push("/");
     } catch (error) {
-      Alert.alert('Registration failed', error.message);
+      Alert.alert("Registration failed", error.message);
     }
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Register</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        value={name}
-        onChangeText={setName}
-      />
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -43,7 +37,6 @@ const Register = ({ navigation }) => {
         secureTextEntry
       />
       <Button title="Register" onPress={handleSubmit} />
-      <Button title="Login" onPress={() => navigation.navigate('Login')} />
     </View>
   );
 };
@@ -51,17 +44,17 @@ const Register = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 16,
   },
   heading: {
     fontSize: 24,
     marginBottom: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,

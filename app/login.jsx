@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import { loginUser } from '../api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useContext } from "react";
+import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { useRouter } from "expo-router";
+import { AuthContext } from "../context/AuthContext";
 
-const Login = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useContext(AuthContext);
+  const router = useRouter();
 
   const handleSubmit = async () => {
     try {
-      const data = await loginUser({ email, password });
-      await AsyncStorage.setItem('mdtoken', data.token);
-      navigation.navigate('Home');
+      await login({ email, password });
+      router.push("/");
     } catch (error) {
-      Alert.alert('Login failed', error.message);
+      Alert.alert("Login failed", error.message);
     }
   };
 
@@ -36,7 +37,7 @@ const Login = ({ navigation }) => {
         secureTextEntry
       />
       <Button title="Login" onPress={handleSubmit} />
-      <Button title="Register" onPress={() => navigation.navigate('Register')} />
+      <Button title="Register" onPress={() => router.push("/register")} />
     </View>
   );
 };
@@ -44,17 +45,17 @@ const Login = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 16,
   },
   heading: {
     fontSize: 24,
     marginBottom: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
