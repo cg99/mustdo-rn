@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native";
-import { deleteTask, updateTask } from "../api/api";
+import { deleteTask, updateTask } from "../api";
 
 const TaskItem = ({ task, onToggleComplete, onDelete }) => {
   return (

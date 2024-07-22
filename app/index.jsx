@@ -1,15 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, SectionList, TouchableOpacity, ScrollView } from 'react-native';
-import { getTasks, getQuote, deleteTask, updateTask } from '../api/api';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { getTasks, getQuote, deleteTask, updateTask, createTask } from '../api';
 import TaskItem from '../components/TaskItem';
-import MenuIcon from '../components/MenuIcon';
+import AddIcon from '../components/AddIcon'; // Ensure you have an AddIcon component
 import { AuthContext } from '../context/AuthContext';
 import { useRouter } from 'expo-router';
+import Header from '../components/Header';
+import AddTaskModal from '../components/AddTaskModal';
 
 const Home = () => {
   const { user, loading } = useContext(AuthContext);
   const [tasks, setTasks] = useState([]);
   const [quote, setQuote] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [taskType, setTaskType] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -61,31 +65,39 @@ const Home = () => {
     }
   };
 
+  const handleAddTask = async (title) => {
+    try {
+      const newTask = { title, taskType, date: new Date() };
+      const createdTask = await createTask(newTask);
+      setTasks([...tasks, createdTask]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const openModal = (type) => {
+    setTaskType(type);
+    setModalVisible(true);
+  };
+
   const sections = [
-    { title: 'Daily Engagement', data: tasks.filter(task => task.taskType === 'dailyEngagement') },
-    { title: "Today's Tasks", data: tasks.filter(task => task.taskType === 'regular' && !task.completed) },
-    { title: 'Upcoming', data: tasks.filter(task => task.taskType === 'upcoming') },
-    { title: 'Not To Do', data: tasks.filter(task => task.taskType === 'notToDo') },
+    { title: 'Daily Engagement', taskType: 'dailyEngagement', data: tasks.filter(task => task.taskType === 'dailyEngagement') },
+    { title: "Today's Tasks", taskType: 'regular', data: tasks.filter(task => task.taskType === 'regular' && !task.completed) },
+    { title: 'Upcoming', taskType: 'upcoming', data: tasks.filter(task => task.taskType === 'upcoming') },
+    { title: 'Not To Do', taskType: 'notToDo', data: tasks.filter(task => task.taskType === 'notToDo') },
   ];
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>MustDo</Text>
-        <TouchableOpacity onPress={() => { 
-            router.push("/profile");
-        }}>
-          <MenuIcon />
-        </TouchableOpacity>
-      </View>
+      <Header />
       <Text style={styles.quote}>{quote}</Text>
       <Text style={styles.date}>It's {new Date().toLocaleString()}</Text>
       {sections.map((section, index) => (
         <View key={index} style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>{section.title}</Text>
-            <TouchableOpacity onPress={() => console.log(`Add new task to ${section.title}`)}>
-              <MenuIcon />
+            <TouchableOpacity onPress={() => openModal(section.taskType)}>
+              <AddIcon />
             </TouchableOpacity>
           </View>
           {section.data.map((task) => (
@@ -93,6 +105,11 @@ const Home = () => {
           ))}
         </View>
       ))}
+      <AddTaskModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSave={handleAddTask}
+      />
     </ScrollView>
   );
 };
@@ -102,17 +119,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#f8fafb',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingBottom: 16,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#0e141b',
   },
   quote: {
     fontSize: 18,
