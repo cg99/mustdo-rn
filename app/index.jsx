@@ -7,6 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useRouter } from 'expo-router';
 import Header from '../components/Header';
 import AddTaskModal from '../components/AddTaskModal';
+import moment from 'moment';
 
 const Home = () => {
   const { user, loading } = useContext(AuthContext);
@@ -14,6 +15,7 @@ const Home = () => {
   const [quote, setQuote] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [taskType, setTaskType] = useState('');
+  const [selectedDate, setSelectedDate] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -67,7 +69,7 @@ const Home = () => {
 
   const handleAddTask = async (title) => {
     try {
-      const newTask = { title, taskType, date: new Date() };
+      const newTask = { title, taskType, date: selectedDate || new Date() };
       const createdTask = await createTask(newTask);
       setTasks([...tasks, createdTask]);
     } catch (error) {
@@ -75,17 +77,38 @@ const Home = () => {
     }
   };
 
-  const openModal = (type) => {
+  const openModal = (type, date) => {
     setTaskType(type);
+    setSelectedDate(date);
     setModalVisible(true);
   };
 
   const sections = [
     { title: 'Daily Engagement', taskType: 'dailyEngagement', data: tasks.filter(task => task.taskType === 'dailyEngagement') },
-    { title: "Today's Tasks", taskType: 'regular', data: tasks.filter(task => task.taskType === 'regular' && !task.completed) },
-    { title: 'Upcoming', taskType: 'upcoming', data: tasks.filter(task => task.taskType === 'upcoming') },
+    { title: "Today's Tasks", taskType: 'regular', data: tasks.filter(task => task.taskType === 'regular' && moment(task.date).isSame(moment(), 'day')) },
     { title: 'Not To Do', taskType: 'notToDo', data: tasks.filter(task => task.taskType === 'notToDo') },
   ];
+
+  const upcomingTasks = tasks.filter(task => task.taskType === 'regular' && moment(task.date).isAfter(moment(), 'day') && moment(task.date).isSameOrBefore(moment().add(6, 'days'), 'day'));
+  const groupedUpcomingTasks = upcomingTasks.reduce((groups, task) => {
+    const date = moment(task.date).format('YYYY-MM-DD');
+    if (!groups[date]) {
+      groups[date] = [];
+    }
+    groups[date].push(task);
+    return groups;
+  }, {});
+
+  const nextSixDays = Array.from({ length: 6 }, (_, i) => moment().add(i + 1, 'days').format('YYYY-MM-DD'));
+
+  const upcomingSections = nextSixDays.map(date => ({
+    title: moment(date).format('D - dddd'),
+    taskType: 'regular',
+    date,
+    data: groupedUpcomingTasks[date] || [],
+  }));
+
+  const unfinishedTasks = tasks.filter(task => task.taskType === 'regular' && !task.completed && moment(task.date).isBefore(moment(), 'day'));
 
   return (
     <ScrollView style={styles.container}>
@@ -105,6 +128,28 @@ const Home = () => {
           ))}
         </View>
       ))}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Upcoming</Text>
+        {upcomingSections.map((section, index) => (
+          <View key={index} style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>{section.title}</Text>
+              <TouchableOpacity onPress={() => openModal(section.taskType, section.date)}>
+                <AddIcon />
+              </TouchableOpacity>
+            </View>
+            {section.data.map((task) => (
+              <TaskItem key={task._id} task={task} onToggleComplete={handleToggleComplete} onDelete={handleDelete} />
+            ))}
+          </View>
+        ))}
+      </View>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Unfinished Tasks</Text>
+        {unfinishedTasks.map((task) => (
+          <TaskItem key={task._id} task={task} onToggleComplete={handleToggleComplete} onDelete={handleDelete} />
+        ))}
+      </View>
       <AddTaskModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
