@@ -1,24 +1,46 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, AccessibilityInfo } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import DeleteIcon from './DeleteIcon';
+import PropTypes from 'prop-types';
 
 const TaskItem = ({ task, onToggleComplete, onDelete }) => {
+  // Accessibility label and hint for the checkbox
+  const checkboxAccessibilityLabel = task.completed
+    ? `Completed ${task.title}`
+    : `Not completed ${task.title}`;
+
   return (
     <View style={styles.taskContainer}>
       <Checkbox
         value={task.completed}
         onValueChange={() => onToggleComplete(task)}
         color={task.completed ? '#378fe6' : '#d0dbea'}
+        accessibilityLabel={checkboxAccessibilityLabel}
+        accessibilityHint="Tap to toggle completion"
       />
       <Text style={[styles.taskText, task.completed && styles.completed]}>
         {task.title}
       </Text>
-      <TouchableOpacity onPress={() => onDelete(task._id)}>
+      <TouchableOpacity
+        onPress={() => onDelete(task._id)}
+        accessibilityLabel={`Delete ${task.title}`}
+        accessibilityHint="Tap to delete this task"
+      >
         <DeleteIcon />
       </TouchableOpacity>
     </View>
   );
+};
+
+TaskItem.propTypes = {
+  task: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+  }).isRequired,
+  onToggleComplete: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -35,7 +57,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#0e141b',
     flex: 1,
-    marginLeft: 8, // Add some margin to avoid overlap with checkbox
+    marginLeft: 8, // Add margin to avoid overlap with checkbox
   },
   completed: {
     textDecorationLine: 'line-through',

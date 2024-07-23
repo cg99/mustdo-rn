@@ -1,28 +1,47 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import TaskSection from './TaskSection';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import TaskItem from './TaskItem';
+import AddIcon from './AddIcon';
 
-const TaskList = ({ sections, handleToggleComplete, handleDelete, openModal }) => (
-    <View>
-        {sections.map((section, index) => (
-            <TaskSection
-                key={index}
-                title={section.title}
-                tasks={section.data}
-                onAdd={(date) => openModal(section.taskType, date)}
-                onToggleComplete={handleToggleComplete}
-                onDelete={handleDelete}
-                date={section.date}
-            />
-        ))}
-    </View>
-);
+const TaskList = ({ sections, handleToggleComplete, handleDelete, openModal }) => {
+    return (
+        <>
+            {sections.map((section, index) => (
+                <View key={index} style={styles.section}>
+                    <View style={styles.sectionHeader}>
+                        <Text style={styles.sectionTitle}>{section.title}</Text>
+                        <TouchableOpacity onPress={() => openModal(section.taskType)}>
+                            <AddIcon />
+                        </TouchableOpacity>
+                    </View>
+                    {section.data.map((task) => (
+                        <TaskItem key={task._id} task={task} onToggleComplete={handleToggleComplete} onDelete={handleDelete} />
+                    ))}
+                </View>
+            ))}
+        </>
+    );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+    section: {
+        marginBottom: 20,
+        backgroundColor: 'white',
         padding: 16,
-        backgroundColor: '#f8fafb',
+        borderRadius: 8,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+    },
+    sectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 8,
     },
 });
 

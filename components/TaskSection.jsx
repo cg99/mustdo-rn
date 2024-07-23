@@ -11,7 +11,7 @@ const TaskSection = ({ title, tasks, onAdd, onToggleComplete, onDelete, date }) 
                 <AddIcon />
             </TouchableOpacity>
         </View>
-        {tasks.map((task) => (
+        {tasks?.map((task) => (
             <TaskItem key={task._id} task={task} onToggleComplete={onToggleComplete} onDelete={onDelete} />
         ))}
     </View>
