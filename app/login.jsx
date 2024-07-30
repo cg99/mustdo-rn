@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { AuthContext } from "../context/AuthContext";
 
@@ -28,6 +28,7 @@ const Login = () => {
         onChangeText={setEmail}
         keyboardType="email-address"
         autoCapitalize="none"
+        placeholderTextColor="#888"
       />
       <TextInput
         style={styles.input}
@@ -35,9 +36,14 @@ const Login = () => {
         value={password}
         onChangeText={setPassword}
         secureTextEntry
+        placeholderTextColor="#888"
       />
-      <Button title="Login" onPress={handleSubmit} />
-      <Button title="Register" onPress={() => router.push("/register")} />
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={[styles.button, styles.registerButton]} onPress={() => router.push("/register")}>
+        <Text style={[styles.buttonText, styles.registerButtonText]}>Register</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -47,18 +53,44 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     padding: 16,
+    backgroundColor: "#f5f5f5",
   },
   heading: {
-    fontSize: 24,
-    marginBottom: 16,
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 24,
     textAlign: "center",
+    color: "#333",
   },
   input: {
-    height: 40,
-    borderColor: "gray",
+    height: 48,
+    borderColor: "#ddd",
     borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    backgroundColor: "#fff",
+  },
+  button: {
+    height: 48,
+    borderRadius: 8,
+    backgroundColor: "#378fe6",
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 12,
-    paddingHorizontal: 8,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  registerButton: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#378fe6",
+  },
+  registerButtonText: {
+    color: "#378fe6",
   },
 });
 

@@ -124,16 +124,42 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 16,
     textAlign: 'center',
+    color: '#555',
+    fontStyle: 'italic',
   },
   date: {
     fontSize: 16,
     marginBottom: 16,
     textAlign: 'center',
+    color: '#555',
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 8,
+    color: '#333',
+  },
+  upcomingContainer: {
+    marginTop: 24,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 18,
+    color: '#333',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    fontSize: 18,
+    color: '#d9534f',
   },
 });
 

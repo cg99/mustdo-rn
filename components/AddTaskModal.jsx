@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 
 const AddTaskModal = ({ visible, onClose, onSave }) => {
     const [title, setTitle] = useState('');
@@ -22,8 +22,12 @@ const AddTaskModal = ({ visible, onClose, onSave }) => {
                         onChangeText={setTitle}
                     />
                     <View style={styles.buttonContainer}>
-                        <Button title="Cancel" onPress={onClose} />
-                        <Button title="Save" onPress={handleSave} />
+                        <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onClose}>
+                            <Text style={styles.buttonText}>Cancel</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={handleSave}>
+                            <Text style={styles.saveButtonText}>Save</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -36,31 +40,63 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: 'rgba(0,0,0,0.4)',
     },
     modalContainer: {
-        width: '80%',
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowRadius: 10,
+        width: '90%',
+        maxWidth: 400,
+        padding: 24,
+        backgroundColor: '#ffffff',
+        borderRadius: 12,
+        shadowColor: '#000000',
+        shadowOpacity: 0.3,
+        shadowRadius: 15,
+        elevation: 5,
     },
     title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
+        fontSize: 22,
+        fontWeight: '600',
+        marginBottom: 16,
+        color: '#333',
     },
     input: {
-        borderBottomWidth: 1,
-        marginBottom: 20,
-        padding: 5,
+        borderBottomWidth: 1.5,
+        borderBottomColor: '#ddd',
+        marginBottom: 24,
+        paddingVertical: 10,
+        paddingHorizontal: 8,
+        fontSize: 16,
     },
     buttonContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
+        marginTop: 16,
     },
+    button: {
+        marginLeft: 10,
+        height: 48,
+        borderRadius: 8,
+        backgroundColor: "#378fe6",
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+    },
+    cancelButton: {
+        backgroundColor: "#fff",
+        borderWidth: 1,
+        borderColor: "red",
+    },
+    buttonText: {
+        color: 'red',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    saveButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600',
+    }
 });
 
 export default AddTaskModal;

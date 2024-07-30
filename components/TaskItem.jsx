@@ -35,23 +35,28 @@ const TaskItem = ({ task, onToggleComplete, onDelete }) => {
 const styles = StyleSheet.create({
   taskContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#f8fafb',
-    borderRadius: 8,
-    marginBottom: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
   },
   taskText: {
-    fontSize: 16,
-    color: '#0e141b',
+    fontSize: 18,
+    color: '#333',
     flex: 1,
-    marginLeft: 8, // Add margin to avoid overlap with checkbox
+    marginLeft: 12, // Increased margin to separate from checkbox
   },
   completed: {
     textDecorationLine: 'line-through',
-    color: '#8d99ae',
+    color: '#888',
   },
 });
+
 
 export default TaskItem;

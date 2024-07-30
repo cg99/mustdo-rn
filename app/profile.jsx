@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import Header from "../components/Header";
 import { router } from "expo-router";
@@ -10,34 +10,58 @@ const Profile = () => {
   return (
     <View style={styles.container}>
       <Header />
-      <View style={styles.container}>
+      <View style={styles.content}>
         <Text style={styles.title}>Profile</Text>
         <Text style={styles.label}>Name: {user.name}</Text>
         <Text style={styles.label}>Email: {user.email}</Text>
-        <Button title="Logout" onPress={() => {
-          logout();
-          router.navigate('/login');
-
-        }} />
-
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            router.navigate('/login');
+            logout();
+          }}
+        >
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
       </View>
-    </View >
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: '#f8fafb',
+    backgroundColor: '#f8fafb', // Light background color for a cleaner look
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+    alignItems: 'center', // Center align content
   },
   title: {
-    fontSize: 24,
-    marginBottom: 16,
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#0e141b',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   label: {
     fontSize: 18,
-    marginBottom: 8,
+    color: '#333',
+    marginBottom: 12,
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: '#378fe6',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

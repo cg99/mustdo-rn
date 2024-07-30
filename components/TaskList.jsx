@@ -32,17 +32,21 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 10,
+        shadowOffset: { width: 0, height: 5 },
+        elevation: 5,
     },
     sectionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: 10,
     },
     sectionTitle: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: 'bold',
-        marginBottom: 8,
+        color: '#333',
     },
 });
+
 
 export default TaskList;

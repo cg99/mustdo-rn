@@ -19,24 +19,27 @@ const TaskSection = ({ title, tasks, onAdd, onToggleComplete, onDelete, date }) 
 
 const styles = StyleSheet.create({
     section: {
-        marginBottom: 20,
-        backgroundColor: 'white',
-        padding: 16,
-        borderRadius: 8,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
+        marginBottom: 24,
+        backgroundColor: '#ffffff',
+        padding: 20,
+        borderRadius: 12,
+        shadowColor: '#000000',
+        shadowOpacity: 0.15,
+        shadowRadius: 12,
+        elevation: 4,
     },
     sectionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: 12,
     },
     sectionTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 8,
+        fontSize: 22,
+        fontWeight: '700',
+        color: '#333333',
     },
 });
+
 
 export default TaskSection;

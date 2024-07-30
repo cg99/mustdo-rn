@@ -26,7 +26,11 @@ export const useLogin = () => {
       return getUser();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["user"]);
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+        type: "active",
+        exact: true,
+      });
     },
   });
 };
@@ -39,8 +43,15 @@ export const useRegister = () => {
       await AsyncStorage.setItem("mdtoken", data.token);
       return getUser();
     },
+    onError: (err, userInfo, context) => {
+      console.log("failed to register user", err, userInfo);
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries(["user"]);
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+        type: "active",
+        exact: true,
+      });
     },
   });
 };
@@ -52,7 +63,11 @@ export const useLogout = () => {
       await AsyncStorage.removeItem("mdtoken");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["user"]);
+      queryClient.invalidateQueries({
+        queryKey: ["user"],
+        type: "active",
+        exact: true,
+      });
     },
   });
 };

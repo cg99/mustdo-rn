@@ -24,13 +24,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingBottom: 16,
+        width: '100%', // Full width
+        height: 60, // Smaller height
+        paddingHorizontal: 16,
+        // backgroundColor: '#6200ea', // Vibrant color for prominence
     },
     title: {
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: 'bold',
-        color: '#0e141b',
+        color: '#000', // White text for contrast
     },
 });
+
+
 
 export default Header;
