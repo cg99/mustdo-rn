@@ -1,16 +1,16 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import TaskItem from './TaskItem';
-import AddIcon from './AddIcon';
+import AddIcon from './icons/AddIcon';
 
 const TaskList = ({ sections, handleToggleComplete, handleDelete, openModal }) => {
     return (
         <>
-            {sections.map((section, index) => (
-                <View key={index} style={styles.section}>
+            {sections.map((section, idx) => (
+                <View key={idx} style={styles.section}>
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>{section.title}</Text>
-                        <TouchableOpacity onPress={() => openModal(section.taskType)}>
+                        <TouchableOpacity onPress={() => openModal(section.taskType, section.date)}>
                             <AddIcon />
                         </TouchableOpacity>
                     </View>

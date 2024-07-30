@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, AccessibilityInfo } from 'react-native';
+import DeleteIcon from './icons/DeleteIcon';
 import Checkbox from 'expo-checkbox';
-import DeleteIcon from './DeleteIcon';
-import PropTypes from 'prop-types';
 
 const TaskItem = ({ task, onToggleComplete, onDelete }) => {
   // Accessibility label and hint for the checkbox
@@ -31,16 +30,6 @@ const TaskItem = ({ task, onToggleComplete, onDelete }) => {
       </TouchableOpacity>
     </View>
   );
-};
-
-TaskItem.propTypes = {
-  task: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
-  }).isRequired,
-  onToggleComplete: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

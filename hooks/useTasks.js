@@ -1,11 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getTasks, createTask, updateTask, deleteTask, getQuote } from "../api";
+import { getTasks, createTask, updateTask, deleteTask } from "../api";
 
 // Fetch tasks query
 export const useTasks = () => {
   return useQuery({
     queryKey: ["tasks"],
     queryFn: getTasks,
+    gcTime: 1000 * 60 * 60 * 24, // 24 hours
   });
 };
 
@@ -25,7 +26,11 @@ export const useCreateTask = () => {
       queryClient.setQueryData(["tasks"], context.previousTasks);
     },
     onSettled: () => {
-      queryClient.invalidateQueries(["tasks"]);
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+        type: "active",
+        exact: true,
+      });
     },
   });
 };
@@ -50,7 +55,11 @@ export const useUpdateTask = () => {
       queryClient.setQueryData(["tasks"], context.previousTasks);
     },
     onSettled: () => {
-      queryClient.invalidateQueries(["tasks"]);
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+        type: "active",
+        exact: true,
+      });
     },
   });
 };
@@ -73,15 +82,11 @@ export const useDeleteTask = () => {
       queryClient.setQueryData(["tasks"], context.previousTasks);
     },
     onSettled: () => {
-      queryClient.invalidateQueries(["tasks"]);
+      queryClient.invalidateQueries({
+        queryKey: ["tasks"],
+        type: "active",
+        exact: true,
+      });
     },
-  });
-};
-
-// Fetch quote query
-export const useQuote = () => {
-  return useQuery({
-    queryKey: ["quote"],
-    queryFn: getQuote,
   });
 };

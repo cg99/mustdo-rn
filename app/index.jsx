@@ -1,23 +1,27 @@
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useRouter } from "expo-router";
 import AddTaskModal from '../components/AddTaskModal';
 import Header from '../components/Header';
 import TaskList from '../components/TaskList';
 import TaskSection from '../components/TaskSection';
 import { AuthContext } from '../context/AuthContext';
-import { useCreateTask, useDeleteTask, useQuote, useTasks, useUpdateTask } from '../hooks/useTasks';
+import { useCreateTask, useDeleteTask, useTasks, useUpdateTask } from '../hooks/useTasks';
+import { useQuote } from '../hooks/useQuote';
 
 const Index = () => {
   const { user, loading } = useContext(AuthContext);
-  const { data: tasks, isError, isLoading } = useTasks();
-  const { data: quote } = useQuote();
+  const { data: tasks = [], isError, isLoading } = useTasks();
+  const { data: quote = '' } = useQuote();
   const { mutate: createTask } = useCreateTask();
   const { mutate: updateTask } = useUpdateTask();
   const { mutate: deleteTask } = useDeleteTask();
   const [modalVisible, setModalVisible] = useState(false);
   const [taskType, setTaskType] = useState('');
   const [selectedDate, setSelectedDate] = useState(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -97,8 +101,8 @@ const Index = () => {
       <View style={styles.container}>
         <Text style={styles.sectionTitle}>Upcoming Tasks</Text>
         <TaskList sections={upcomingSections} handleToggleComplete={handleToggleComplete} handleDelete={handleDelete} openModal={openModal} />
-
       </View>
+
       <TaskSection title="Unfinished Tasks" tasks={unfinishedTasks} onAdd={openModal} onToggleComplete={handleToggleComplete} onDelete={handleDelete} />
 
       <AddTaskModal

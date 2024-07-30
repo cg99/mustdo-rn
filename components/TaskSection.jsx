@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import TaskItem from './TaskItem';
-import AddIcon from './AddIcon';
+import AddIcon from './icons/AddIcon';
 
 const TaskSection = ({ title, tasks, onAdd, onToggleComplete, onDelete, date }) => (
     <View style={styles.section}>
